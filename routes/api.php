@@ -48,6 +48,7 @@ Route::post('login-estudiante',[EstudianteAuthController::class,'loginEstudiante
 Route::get('traer-alumnos',[EstudianteController::class,'traerEstudiantes']);
 Route::get('verinfo-estudiante/{id}',[EstudianteController::class,'obtenerInfoEstudiante']);
 Route::put('editar-perfil-estudiante/{id}',[EstudianteController::class,'editarPerfil']);
+Route::put('editar-password/{id}',[EstudianteController::class,'actualizarPassword']);
 
 
 //seccion Tarea

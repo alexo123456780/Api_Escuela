@@ -280,23 +280,70 @@ class EstudianteController extends Controller
             ]
         );
 
+        $estudiante_encontrado = Estudiante::find($id_alumno);
+
+        if(!$estudiante_encontrado){
+
+            return response()->json([
+
+                'status' => false,
+                'message' => 'El estudiante no existe o no se encuentra registrado aun',
+                'code' => 404
+            ],404);
+        }
+
+        if(Hash::check($passwordValidado['password'],$estudiante_encontrado->password)){
+
+            return response()->json([
+
+                'status' => false,
+                'message' => 'Debes de ingresar otro password que no sea el mismo',
+                'code' => 400
+            ],400);
+        }
 
 
+        $passwordValidado['password'] = Hash::make($passwordValidado['password']);
 
+        $estudiante_encontrado->update($passwordValidado);
+
+        $estudiante_encontrado->save();
+
+        return response()->json([
+
+            'status' => true,
+            'message' => 'El password ha sido actualizada correctamente',
+            'data' => $estudiante_encontrado,
+            'code' => 200
+        ],200);
 
         }catch(\Illuminate\Validation\ValidationException $e){
 
+            return response()->json([
+
+                'status' => false,
+                'message' => 'Error de validacion en el password',
+                'warning' => $e->errors(),
+                'code' => 400
+            ],400);
+
+        }catch(\Exception $e){
+
+            return response()->json([
+
+                'status' => false,
+                'message' => 'Error de codificacion en el metodo',
+                'warning' => $e->getMessage(),
+                'code' => 500
+            ],500);
 
 
         }
 
-
-
-
-
-
-
     }
+
+
+    
 
 
 
